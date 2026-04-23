@@ -278,6 +278,25 @@ fn initialize_core_logic(app_handle: &AppHandle) {
         tray::update_tray_menu(&app_handle_for_listener, &tray::TrayIconState::Idle, None);
     });
 
+    // Cleanup old LaunchAgent plists that caused double-launch issues
+    #[cfg(target_os = "macos")]
+    {
+        if let Ok(home) = app_handle.path().home_dir() {
+            for plist_name in [
+                "Praat.plist",
+                "Handy.plist",
+                "com.pais.praat.plist",
+                "com.cjpais.handy.plist",
+            ] {
+                let path = home.join("Library/LaunchAgents").join(plist_name);
+                if path.exists() {
+                    log::info!("Removing old LaunchAgent plist: {:?}", path);
+                    let _ = std::fs::remove_file(path);
+                }
+            }
+        }
+    }
+
     // Get the autostart manager and configure based on user setting
     let autostart_manager = app_handle.autolaunch();
     let settings = settings::get_settings(&app_handle);
@@ -501,7 +520,7 @@ pub fn run(cli_args: CliArgs) {
         .plugin(tauri_plugin_store::Builder::default().build())
         .plugin(tauri_plugin_global_shortcut::Builder::new().build())
         .plugin(tauri_plugin_autostart::init(
-            MacosLauncher::LaunchAgent,
+            MacosLauncher::AppleScript,
             Some(vec![]),
         ))
         .manage(cli_args.clone())
@@ -512,7 +531,7 @@ pub fn run(cli_args: CliArgs) {
             // for portable mode (redirects WebView2 cache to portable Data dir)
             let mut win_builder =
                 tauri::WebviewWindowBuilder::new(app, "main", tauri::WebviewUrl::App("/".into()))
-                    .title("Handy")
+                    .title("Praat")
                     .inner_size(680.0, 570.0)
                     .min_inner_size(680.0, 570.0)
                     .resizable(true)

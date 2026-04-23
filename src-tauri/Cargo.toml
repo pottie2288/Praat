@@ -1,11 +1,11 @@
 [package]
-name = "handy"
+name = "praat"
 version = "0.8.2"
-description = "Handy"
+description = "Praat"
 authors = ["cjpais"]
 edition = "2021"
 license = "MIT"
-default-run = "handy"
+default-run = "praat"
 
 [profile.dev]
 incremental = true # Compile your binary in smaller steps.
