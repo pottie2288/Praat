@@ -64,10 +64,5 @@
       }
     }
   },
-  "plugins": {
-    "updater": {
-      "pubkey": "",
-      "endpoints": []
-    }
-  }
+  "plugins": {}
 }

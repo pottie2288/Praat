@@ -20,12 +20,9 @@
     />
     <meta property="og:type" content="website" />
 
-    <!-- Favicon (inline SVG so there's no extra file to host) -->
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23faa2ca'/%3E%3Ctext x='50' y='70' font-family='system-ui, sans-serif' font-weight='900' font-size='55' text-anchor='middle' fill='%23382731'%3Ep%3C/text%3E%3C/svg%3E"
-    />
+    <!-- Favicon: the actual Praat smiley -->
+    <link rel="icon" type="image/png" href="praat-smiley.png" />
+    <link rel="apple-touch-icon" href="praat-smiley.png" />
 
     <link
       rel="preconnect"
@@ -120,13 +117,8 @@
         box-shadow: var(--shadow-sm);
       }
 
-      .header-badge::before {
-        content: "";
-        width: 8px;
-        height: 8px;
-        background: #22c55e;
-        border-radius: 50%;
-        box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25);
+      .header-badge img {
+        display: inline-block;
       }
 
       .github-link {
@@ -154,9 +146,63 @@
         text-align: center;
       }
 
+      /* Smiley mascot */
+      .smiley-hero {
+        width: 160px;
+        height: 160px;
+        margin: 0 auto 24px;
+        display: block;
+        filter: drop-shadow(0 8px 0 var(--ink));
+        animation: wobble 4s ease-in-out infinite;
+        transform-origin: center bottom;
+      }
+
+      @keyframes wobble {
+        0%, 100% { transform: translateY(0) rotate(-4deg); }
+        25% { transform: translateY(-8px) rotate(4deg); }
+        50% { transform: translateY(0) rotate(-2deg); }
+        75% { transform: translateY(-4px) rotate(3deg); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .smiley-hero,
+        .smiley-peek {
+          animation: none;
+        }
+      }
+
+      /* Smiley peeking accents */
+      .smiley-peek {
+        position: absolute;
+        width: 64px;
+        height: 64px;
+        filter: drop-shadow(0 4px 0 var(--ink));
+        pointer-events: none;
+      }
+
+      .smiley-peek.top-right {
+        top: -18px;
+        right: -18px;
+        transform: rotate(18deg);
+        animation: wiggle 3s ease-in-out infinite;
+      }
+
+      .smiley-peek.bottom-left {
+        bottom: -22px;
+        left: -22px;
+        transform: rotate(-14deg);
+        animation: wiggle 3.6s ease-in-out infinite 0.8s;
+      }
+
+      @keyframes wiggle {
+        0%, 100% { transform: rotate(-14deg) scale(1); }
+        50% { transform: rotate(-4deg) scale(1.08); }
+      }
+
       .logo-wrap {
         margin: 0 auto 28px;
         max-width: 560px;
+        position: relative;
       }
 
       .logo-svg {
@@ -240,6 +286,7 @@
         border: 4px solid var(--ink);
         border-radius: 28px;
         box-shadow: var(--shadow);
+        position: relative;
       }
 
       .all-platforms h3 {
@@ -346,6 +393,7 @@
       /* FAQ */
       .faq {
         margin-top: 80px;
+        position: relative;
       }
 
       .faq h2 {
@@ -434,7 +482,16 @@
   <body>
     <div class="container">
       <header>
-        <span class="header-badge">Free &amp; open source</span>
+        <span class="header-badge">
+          <img
+            src="praat-smiley.png"
+            alt=""
+            width="20"
+            height="20"
+            style="border-radius: 50%; border: 2px solid var(--ink)"
+          />
+          Free &amp; open source
+        </span>
         <a
           class="github-link"
           href="https://github.com/pottie2288/Praat"
@@ -445,6 +502,13 @@
       </header>
 
       <section class="hero">
+        <img
+          class="smiley-hero"
+          src="praat-smiley.png"
+          alt="Praat mascot"
+          width="160"
+          height="160"
+        />
         <div class="logo-wrap">
           <svg
             class="logo-svg"
@@ -519,6 +583,12 @@
         </div>
 
         <div class="all-platforms">
+          <img
+            class="smiley-peek top-right"
+            src="praat-smiley.png"
+            alt=""
+            aria-hidden="true"
+          />
           <h3>Or pick your platform</h3>
           <div class="platforms-grid">
             <a
@@ -598,6 +668,12 @@
       </section>
 
       <section class="faq">
+        <img
+          class="smiley-peek bottom-left"
+          src="praat-smiley.png"
+          alt=""
+          aria-hidden="true"
+        />
         <h2>Questions</h2>
 
         <details>
