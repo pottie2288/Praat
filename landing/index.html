@@ -2,415 +2,725 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
     <title>Praat — Speech to text that stays on your device</title>
-    <meta
-      name="description"
-      content="Praat is a free, open-source, 100% local speech-to-text app for macOS, Windows, and Linux. Your voice never leaves your machine."
-    />
-
-    <!-- Open Graph -->
+    <meta name="description" content="Praat is a free, open-source, 100% local speech-to-text app for macOS and Windows. Your voice never leaves your machine." />
     <meta property="og:title" content="Praat — Local speech to text" />
-    <meta
-      property="og:description"
-      content="Free, private, open-source speech-to-text for macOS, Windows, and Linux."
-    />
+    <meta property="og:description" content="Free, private, open-source speech-to-text for macOS and Windows." />
     <meta property="og:type" content="website" />
-
-    <!-- Favicon: the actual Praat smiley -->
     <link rel="icon" type="image/png" href="praat-smiley.png" />
     <link rel="apple-touch-icon" href="praat-smiley.png" />
-
-    <link
-      rel="preconnect"
-      href="https://fonts.googleapis.com"
-    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&display=swap"
-    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&display=swap" />
 
     <style>
       :root {
         --pink: #faa2ca;
-        --pink-soft: #fddaeb;
-        --pink-deep: #f28cbb;
-        --ink: #382731;
-        --cream: #fff7fb;
-        --shadow: 0 12px 0 var(--ink);
-        --shadow-sm: 0 6px 0 var(--ink);
+        --pink-deep: #f07ab0;
+        --pink-soft: #fde8f3;
+        --ink: #2a1520;
+        --ink-mid: #4a2535;
+        --cream: #fff8fc;
+        --white: #ffffff;
+        --border: 3px solid var(--ink);
+        --shadow: 0 8px 0 var(--ink);
+        --shadow-lg: 0 12px 0 var(--ink);
+        --radius-pill: 999px;
+        --radius-xl: 28px;
+        --radius-lg: 20px;
+        --radius-md: 14px;
+        --radius-smiley: 22px;
       }
 
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --pink: #f28cbb;
-          --pink-soft: #3a2631;
-          --pink-deep: #faa2ca;
-          --ink: #fad1ed;
-          --cream: #1d0f18;
-          --shadow: 0 12px 0 var(--ink);
-          --shadow-sm: 0 6px 0 var(--ink);
-        }
-      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
 
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
+      html { scroll-behavior: smooth; }
 
-      html,
       body {
-        font-family:
-          ui-rounded, "SF Pro Rounded", "Nunito", "Baloo 2", system-ui,
-          sans-serif;
+        font-family: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, sans-serif;
         background: var(--cream);
         color: var(--ink);
-        min-height: 100vh;
         -webkit-font-smoothing: antialiased;
-        scroll-behavior: smooth;
+        overflow-x: hidden;
       }
 
-      body {
-        background-image:
-          radial-gradient(
-            at 20% 0%,
-            var(--pink-soft) 0%,
-            transparent 50%
-          ),
-          radial-gradient(
-            at 80% 100%,
-            var(--pink-soft) 0%,
-            transparent 50%
-          );
-        background-attachment: fixed;
-      }
-
-      .container {
-        max-width: 1040px;
-        margin: 0 auto;
-        padding: 48px 24px 80px;
-      }
-
-      /* Header */
-      header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 64px;
-      }
-
-      .header-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 14px;
-        background: var(--cream);
-        border: 3px solid var(--ink);
-        border-radius: 999px;
-        font-weight: 800;
-        font-size: 14px;
-        box-shadow: var(--shadow-sm);
-      }
-
-      .header-badge img {
-        display: inline-block;
-      }
-
-      .github-link {
-        padding: 10px 16px;
-        background: var(--cream);
-        border: 3px solid var(--ink);
-        border-radius: 999px;
-        color: var(--ink);
-        text-decoration: none;
-        font-weight: 800;
-        font-size: 14px;
-        box-shadow: var(--shadow-sm);
-        transition:
-          transform 0.15s,
-          box-shadow 0.15s;
-      }
-
-      .github-link:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 0 var(--ink);
-      }
-
-      /* Hero logo */
-      .hero {
-        text-align: center;
-      }
-
-      /* Smiley mascot */
-      .smiley-hero {
-        width: 160px;
-        height: 160px;
-        margin: 0 auto 24px;
-        display: block;
-        filter: drop-shadow(0 8px 0 var(--ink));
-        animation: wobble 4s ease-in-out infinite;
-        transform-origin: center bottom;
-      }
-
-      @keyframes wobble {
-        0%, 100% { transform: translateY(0) rotate(-4deg); }
-        25% { transform: translateY(-8px) rotate(4deg); }
-        50% { transform: translateY(0) rotate(-2deg); }
-        75% { transform: translateY(-4px) rotate(3deg); }
-      }
-
+      /* ─── REDUCED MOTION ─── */
       @media (prefers-reduced-motion: reduce) {
-        .smiley-hero,
-        .smiley-peek {
-          animation: none;
-        }
+        *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; }
       }
 
-      /* Smiley peeking accents */
-      .smiley-peek {
+      /* ══════════════════════════════════════════
+         HERO
+      ══════════════════════════════════════════ */
+      .hero {
+        min-height: 100svh;
+        background: var(--ink);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 24px 80px;
+        overflow: hidden;
+      }
+
+      /* Animated gradient orbs */
+      .hero::before,
+      .hero::after {
+        content: "";
         position: absolute;
-        width: 64px;
-        height: 64px;
-        filter: drop-shadow(0 4px 0 var(--ink));
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.35;
+        pointer-events: none;
+      }
+      .hero::before {
+        width: 600px;
+        height: 600px;
+        background: var(--pink);
+        top: -200px;
+        left: -100px;
+        animation: orb-drift 12s ease-in-out infinite alternate;
+      }
+      .hero::after {
+        width: 400px;
+        height: 400px;
+        background: #c060a0;
+        bottom: -100px;
+        right: -80px;
+        animation: orb-drift 9s ease-in-out infinite alternate-reverse;
+      }
+
+      @keyframes orb-drift {
+        from { transform: translate(0, 0) scale(1); }
+        to   { transform: translate(40px, 30px) scale(1.1); }
+      }
+
+      /* Dot grid texture */
+      .hero-grid {
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(circle, rgba(250,162,202,0.18) 1px, transparent 1px);
+        background-size: 32px 32px;
         pointer-events: none;
       }
 
-      .smiley-peek.top-right {
-        top: -18px;
-        right: -18px;
-        transform: rotate(18deg);
-        animation: wiggle 3s ease-in-out infinite;
+      /* NAV */
+      .nav {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 32px;
+        z-index: 10;
       }
 
-      .smiley-peek.bottom-left {
-        bottom: -22px;
-        left: -22px;
-        transform: rotate(-14deg);
-        animation: wiggle 3.6s ease-in-out infinite 0.8s;
+      .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        color: var(--pink);
+        font-weight: 900;
+        font-size: 18px;
+        letter-spacing: -0.5px;
       }
 
-      @keyframes wiggle {
-        0%, 100% { transform: rotate(-14deg) scale(1); }
-        50% { transform: rotate(-4deg) scale(1.08); }
-      }
-
-      .logo-wrap {
-        margin: 0 auto 28px;
-        max-width: 560px;
-        position: relative;
-      }
-
-      .logo-svg {
-        width: 100%;
-        height: auto;
+      .nav-logo img {
+        width: 32px;
+        height: 32px;
+        border-radius: var(--radius-smiley);
+        border: 2px solid var(--pink);
         display: block;
       }
 
-      .tagline {
-        font-size: clamp(22px, 3.5vw, 36px);
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .btn-ghost {
+        padding: 8px 16px;
+        border: 2px solid rgba(250,162,202,0.4);
+        border-radius: var(--radius-pill);
+        color: var(--pink);
+        text-decoration: none;
         font-weight: 800;
-        line-height: 1.2;
-        margin-bottom: 16px;
-        max-width: 720px;
+        font-size: 14px;
+        transition: border-color 0.2s, background 0.2s;
+        backdrop-filter: blur(8px);
+      }
+
+      .btn-ghost:hover {
+        border-color: var(--pink);
+        background: rgba(250,162,202,0.1);
+      }
+
+      /* HERO CONTENT */
+      .hero-inner {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        max-width: 780px;
+        margin: 0 auto;
+      }
+
+      /* Floating pills around smiley */
+      .float-ring {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        margin: 0 auto 32px;
+      }
+
+      .smiley-main {
+        width: 160px;
+        height: 160px;
+        border-radius: var(--radius-smiley);
+        border: 4px solid var(--pink);
+        box-shadow: 0 0 0 8px rgba(250,162,202,0.15), var(--shadow-lg);
+        display: block;
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+        animation: float 5s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(-2deg); }
+        50%       { transform: translateY(-14px) rotate(2deg); }
+      }
+
+      /* Floating badge chips */
+      .chip {
+        position: absolute;
+        background: var(--pink);
+        color: var(--ink);
+        border: 2px solid var(--ink);
+        border-radius: var(--radius-pill);
+        font-size: 12px;
+        font-weight: 900;
+        padding: 5px 12px;
+        white-space: nowrap;
+        box-shadow: 3px 3px 0 var(--ink);
+        animation: chip-float 6s ease-in-out infinite;
+        z-index: 3;
+      }
+
+      .chip-1 { top: 10px; left: -60px; animation-delay: 0s; }
+      .chip-2 { bottom: 20px; right: -70px; animation-delay: 1.5s; }
+      .chip-3 { bottom: 10px; left: -40px; animation-delay: 0.8s; }
+
+      @keyframes chip-float {
+        0%, 100% { transform: translateY(0); }
+        50%       { transform: translateY(-6px); }
+      }
+
+      /* HERO TITLE */
+      .hero-wordmark {
+        font-size: clamp(88px, 18vw, 180px);
+        font-weight: 900;
+        line-height: 0.9;
+        letter-spacing: -4px;
+        color: var(--pink);
+        text-shadow:
+          6px 6px 0 var(--ink),
+          -2px -2px 0 rgba(250,162,202,0.3);
+        margin-bottom: 24px;
+        display: block;
+      }
+
+      .hero-tagline {
+        font-size: clamp(18px, 3vw, 26px);
+        font-weight: 800;
+        color: rgba(255,248,252,0.9);
+        line-height: 1.3;
+        margin-bottom: 12px;
+      }
+
+      .hero-sub {
+        font-size: clamp(14px, 2vw, 17px);
+        font-weight: 600;
+        color: rgba(250,162,202,0.7);
+        margin-bottom: 48px;
+        line-height: 1.6;
+        max-width: 520px;
         margin-left: auto;
         margin-right: auto;
       }
 
-      .sub-tagline {
-        font-size: clamp(15px, 2vw, 18px);
-        font-weight: 600;
-        opacity: 0.75;
-        max-width: 560px;
-        margin: 0 auto 48px;
-      }
-
-      /* Primary download */
-      .primary-download-wrap {
+      /* PRIMARY CTA */
+      .cta-group {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 16px;
-        margin-bottom: 20px;
+        gap: 14px;
       }
 
-      .primary-download {
+      .btn-download {
         display: inline-flex;
         align-items: center;
-        gap: 14px;
-        padding: 20px 36px;
+        gap: 12px;
+        padding: 18px 40px;
         background: var(--pink);
         color: var(--ink);
-        border: 4px solid var(--ink);
-        border-radius: 24px;
+        border: 3px solid var(--ink);
+        border-radius: var(--radius-xl);
         text-decoration: none;
         font-size: 20px;
         font-weight: 900;
-        box-shadow: var(--shadow);
-        transition:
-          transform 0.15s,
-          box-shadow 0.15s;
+        box-shadow: var(--shadow-lg);
+        transition: transform 0.15s, box-shadow 0.15s;
         cursor: pointer;
+        letter-spacing: -0.3px;
       }
 
-      .primary-download:hover {
+      .btn-download:hover {
         transform: translateY(-3px);
         box-shadow: 0 15px 0 var(--ink);
       }
 
-      .primary-download:active {
-        transform: translateY(6px);
+      .btn-download:active {
+        transform: translateY(5px);
         box-shadow: 0 3px 0 var(--ink);
       }
 
-      .primary-download svg {
-        width: 28px;
-        height: 28px;
-      }
+      .btn-download svg { width: 24px; height: 24px; flex-shrink: 0; }
 
-      .primary-download-note {
+      .cta-meta {
         font-size: 13px;
         font-weight: 700;
-        opacity: 0.7;
+        color: rgba(250,162,202,0.6);
       }
 
-      /* All platforms section */
-      .all-platforms {
-        margin-top: 48px;
-        padding: 36px 28px;
+      /* Scroll hint */
+      .scroll-hint {
+        position: absolute;
+        bottom: 28px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 5;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        color: rgba(250,162,202,0.5);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .scroll-arrow {
+        width: 20px;
+        height: 20px;
+        animation: bounce 2s ease-in-out infinite;
+      }
+
+      @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50%       { transform: translateY(6px); }
+      }
+
+      /* ══════════════════════════════════════════
+         SECTION WRAPPER
+      ══════════════════════════════════════════ */
+      .section {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+
+      .section-title {
+        font-size: clamp(28px, 4vw, 42px);
+        font-weight: 900;
+        text-align: center;
+        margin-bottom: 8px;
+        letter-spacing: -1px;
+      }
+
+      .section-sub {
+        text-align: center;
+        font-size: 16px;
+        font-weight: 600;
+        opacity: 0.6;
+        margin-bottom: 48px;
+      }
+
+      /* ══════════════════════════════════════════
+         HOW IT WORKS
+      ══════════════════════════════════════════ */
+      .how {
+        padding: 100px 0 80px;
         background: var(--cream);
-        border: 4px solid var(--ink);
-        border-radius: 28px;
-        box-shadow: var(--shadow);
+      }
+
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 20px;
         position: relative;
       }
 
-      .all-platforms h3 {
-        font-size: 22px;
-        font-weight: 900;
-        margin-bottom: 20px;
-        text-align: center;
+      .step {
+        background: var(--white);
+        border: 3px solid var(--ink);
+        border-radius: var(--radius-xl);
+        padding: 32px 28px;
+        box-shadow: var(--shadow);
+        position: relative;
+        overflow: hidden;
       }
 
-      .platforms-grid {
+      .step::before {
+        content: attr(data-n);
+        position: absolute;
+        top: -16px;
+        right: 20px;
+        font-size: 100px;
+        font-weight: 900;
+        color: var(--pink-soft);
+        line-height: 1;
+        pointer-events: none;
+        letter-spacing: -4px;
+      }
+
+      .step-icon {
+        width: 52px;
+        height: 52px;
+        background: var(--pink);
+        border: 3px solid var(--ink);
+        border-radius: var(--radius-lg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        box-shadow: 3px 3px 0 var(--ink);
+      }
+
+      .step-icon svg { width: 26px; height: 26px; stroke: var(--ink); }
+
+      .step h3 {
+        font-size: 20px;
+        font-weight: 900;
+        margin-bottom: 10px;
+        letter-spacing: -0.3px;
+      }
+
+      .step p {
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 1.6;
+        opacity: 0.75;
+      }
+
+      /* ══════════════════════════════════════════
+         FEATURES BENTO
+      ══════════════════════════════════════════ */
+      .features {
+        padding: 80px 0;
+        background: var(--ink);
+      }
+
+      .features .section-title { color: var(--pink); }
+      .features .section-sub { color: rgba(250,162,202,0.6); }
+
+      .bento {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        grid-template-columns: repeat(6, 1fr);
+        grid-template-rows: auto;
         gap: 16px;
+      }
+
+      .bento-card {
+        background: rgba(255,255,255,0.04);
+        border: 2px solid rgba(250,162,202,0.2);
+        border-radius: var(--radius-xl);
+        padding: 32px 28px;
+        transition: border-color 0.2s, background 0.2s;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .bento-card:hover {
+        border-color: rgba(250,162,202,0.5);
+        background: rgba(250,162,202,0.06);
+      }
+
+      /* Bento layout spans */
+      .bento-card:nth-child(1) { grid-column: span 4; }
+      .bento-card:nth-child(2) { grid-column: span 2; }
+      .bento-card:nth-child(3) { grid-column: span 2; }
+      .bento-card:nth-child(4) { grid-column: span 4; }
+
+      @media (max-width: 768px) {
+        .bento-card { grid-column: span 6 !important; }
+      }
+
+      .bento-icon {
+        width: 52px;
+        height: 52px;
+        background: var(--pink);
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+
+      .bento-icon svg { width: 26px; height: 26px; stroke: var(--ink); }
+
+      .bento-card h3 {
+        font-size: 22px;
+        font-weight: 900;
+        color: var(--white);
+        margin-bottom: 10px;
+        letter-spacing: -0.4px;
+      }
+
+      .bento-card p {
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 1.65;
+        color: rgba(255,248,252,0.6);
+      }
+
+      /* Big card accent */
+      .bento-card.accent {
+        background: var(--pink);
+        border-color: var(--pink);
+      }
+
+      .bento-card.accent h3 { color: var(--ink); }
+      .bento-card.accent p { color: rgba(42,21,32,0.7); }
+      .bento-card.accent .bento-icon { background: var(--ink); }
+      .bento-card.accent .bento-icon svg { stroke: var(--pink); }
+
+      .bento-card.accent:hover {
+        border-color: var(--pink);
+        background: var(--pink-deep);
+      }
+
+      /* Mascot card */
+      .bento-mascot {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .bento-mascot img {
+        width: 80px;
+        height: 80px;
+        border-radius: var(--radius-smiley);
+        border: 3px solid rgba(250,162,202,0.4);
+        flex-shrink: 0;
+      }
+
+      /* ══════════════════════════════════════════
+         DOWNLOADS
+      ══════════════════════════════════════════ */
+      .downloads {
+        padding: 100px 0 80px;
+        background: var(--cream);
+      }
+
+      .platform-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
       }
 
       .platform-card {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        padding: 24px 16px;
-        background: var(--cream);
+        align-items: flex-start;
+        padding: 32px 28px;
+        background: var(--white);
         border: 3px solid var(--ink);
-        border-radius: 20px;
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow);
         text-decoration: none;
         color: var(--ink);
-        transition:
-          transform 0.15s,
-          box-shadow 0.15s,
-          background 0.15s;
+        transition: transform 0.15s, box-shadow 0.15s;
+        position: relative;
+        overflow: hidden;
       }
 
       .platform-card:hover {
-        transform: translateY(-3px);
-        box-shadow: var(--shadow-sm);
-        background: var(--pink-soft);
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
       }
 
-      .platform-card svg {
-        width: 40px;
-        height: 40px;
-        margin-bottom: 12px;
+      .platform-card:active {
+        transform: translateY(4px);
+        box-shadow: 3px 3px 0 var(--ink);
       }
 
-      .platform-card .name {
-        font-weight: 900;
-        font-size: 16px;
-        margin-bottom: 6px;
-      }
-
-      .platform-card .formats {
-        font-size: 12px;
-        font-weight: 700;
-        opacity: 0.65;
-        text-align: center;
-      }
-
-      /* Features */
-      .features {
-        margin-top: 80px;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 20px;
-      }
-
-      .feature {
-        padding: 28px 24px;
-        background: var(--cream);
-        border: 4px solid var(--ink);
-        border-radius: 24px;
-        box-shadow: var(--shadow-sm);
-      }
-
-      .feature-icon {
-        width: 48px;
-        height: 48px;
+      .platform-card.featured {
         background: var(--pink);
-        border: 3px solid var(--ink);
-        border-radius: 14px;
+        border-color: var(--ink);
+      }
+
+      .platform-card.featured .platform-badge { background: var(--ink); color: var(--pink); }
+
+      .platform-os-icon {
+        width: 56px;
+        height: 56px;
+        background: var(--pink-soft);
+        border: 2px solid var(--ink);
+        border-radius: var(--radius-lg);
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-bottom: 16px;
+        margin-bottom: 20px;
       }
 
-      .feature-icon svg {
-        width: 24px;
-        height: 24px;
-        stroke: var(--ink);
+      .platform-card.featured .platform-os-icon {
+        background: var(--ink);
       }
 
-      .feature h3 {
-        font-size: 18px;
+      .platform-card.featured .platform-os-icon svg {
+        fill: var(--pink);
+      }
+
+      .platform-os-icon svg { width: 28px; height: 28px; fill: var(--ink); }
+
+      .platform-name {
+        font-size: 22px;
         font-weight: 900;
-        margin-bottom: 8px;
+        margin-bottom: 4px;
+        letter-spacing: -0.4px;
       }
 
-      .feature p {
-        font-size: 15px;
-        font-weight: 600;
-        line-height: 1.5;
-        opacity: 0.8;
+      .platform-arch {
+        font-size: 13px;
+        font-weight: 700;
+        opacity: 0.6;
+        margin-bottom: 24px;
       }
 
-      /* FAQ */
-      .faq {
-        margin-top: 80px;
+      .platform-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--ink);
+        color: var(--cream);
+        border-radius: var(--radius-pill);
+        padding: 7px 16px;
+        font-size: 14px;
+        font-weight: 900;
+        margin-top: auto;
+      }
+
+      .platform-badge svg { width: 16px; height: 16px; }
+
+      .platform-corner {
+        position: absolute;
+        bottom: -20px;
+        right: -20px;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: rgba(250,162,202,0.12);
+        pointer-events: none;
+      }
+
+      .platform-card.featured .platform-corner {
+        background: rgba(42,21,32,0.08);
+      }
+
+      /* Smiley peeking in download section */
+      .smiley-peek-wrap {
+        text-align: center;
+        margin-bottom: 48px;
         position: relative;
       }
 
-      .faq h2 {
-        font-size: 28px;
+      .smiley-peek-wrap img {
+        width: 64px;
+        height: 64px;
+        border-radius: var(--radius-smiley);
+        border: 3px solid var(--ink);
+        box-shadow: var(--shadow);
+        display: inline-block;
+        animation: wiggle 4s ease-in-out infinite;
+      }
+
+      @keyframes wiggle {
+        0%, 100% { transform: rotate(-5deg); }
+        50%       { transform: rotate(5deg); }
+      }
+
+      /* ══════════════════════════════════════════
+         SOCIAL PROOF STRIP
+      ══════════════════════════════════════════ */
+      .proof-strip {
+        background: var(--pink);
+        border-top: 3px solid var(--ink);
+        border-bottom: 3px solid var(--ink);
+        padding: 18px 24px;
+        overflow: hidden;
+      }
+
+      .proof-track {
+        display: flex;
+        gap: 48px;
+        animation: marquee 20s linear infinite;
+        width: max-content;
+      }
+
+      .proof-item {
+        font-size: 15px;
         font-weight: 900;
-        margin-bottom: 24px;
-        text-align: center;
+        color: var(--ink);
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .proof-dot {
+        width: 6px;
+        height: 6px;
+        background: var(--ink);
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      @keyframes marquee {
+        from { transform: translateX(0); }
+        to   { transform: translateX(-50%); }
+      }
+
+      /* ══════════════════════════════════════════
+         FAQ
+      ══════════════════════════════════════════ */
+      .faq {
+        padding: 100px 0 80px;
+        background: var(--cream);
+      }
+
+      .faq-list {
+        max-width: 720px;
+        margin: 0 auto;
       }
 
       details {
-        background: var(--cream);
+        background: var(--white);
         border: 3px solid var(--ink);
-        border-radius: 18px;
-        padding: 18px 22px;
+        border-radius: var(--radius-lg);
+        padding: 20px 24px;
         margin-bottom: 12px;
-        box-shadow: var(--shadow-sm);
+        box-shadow: 4px 4px 0 var(--ink);
+        transition: box-shadow 0.15s;
       }
+
+      details[open] { box-shadow: var(--shadow); }
 
       details summary {
         font-weight: 900;
@@ -420,447 +730,500 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 16px;
       }
 
-      details summary::after {
-        content: "+";
-        font-size: 24px;
-        transition: transform 0.2s;
+      details summary::-webkit-details-marker { display: none; }
+
+      .summary-icon {
+        width: 28px;
+        height: 28px;
+        background: var(--pink-soft);
+        border: 2px solid var(--ink);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        font-weight: 900;
+        flex-shrink: 0;
+        transition: transform 0.2s, background 0.2s;
+        line-height: 1;
       }
 
-      details[open] summary::after {
+      details[open] .summary-icon {
         transform: rotate(45deg);
+        background: var(--pink);
       }
 
       details > p {
-        margin-top: 12px;
+        margin-top: 14px;
         font-weight: 600;
-        line-height: 1.6;
-        opacity: 0.85;
+        line-height: 1.7;
+        opacity: 0.8;
+        font-size: 15px;
       }
 
-      /* Footer */
+      details > p code {
+        background: var(--pink-soft);
+        border: 1px solid var(--ink);
+        border-radius: 6px;
+        padding: 2px 7px;
+        font-size: 13px;
+        font-family: ui-monospace, monospace;
+      }
+
+      /* ══════════════════════════════════════════
+         FOOTER
+      ══════════════════════════════════════════ */
       footer {
-        margin-top: 80px;
-        padding-top: 32px;
-        border-top: 3px dashed var(--ink);
+        background: var(--ink);
+        padding: 48px 24px;
         text-align: center;
-        font-size: 14px;
+      }
+
+      .footer-logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 20px;
+        text-decoration: none;
+      }
+
+      .footer-logo img {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius-smiley);
+        border: 2px solid rgba(250,162,202,0.4);
+      }
+
+      .footer-logo span {
+        font-size: 22px;
+        font-weight: 900;
+        color: var(--pink);
+        letter-spacing: -1px;
+      }
+
+      footer p {
+        font-size: 13px;
         font-weight: 700;
-        opacity: 0.6;
+        color: rgba(250,162,202,0.45);
+        line-height: 1.8;
       }
 
       footer a {
-        color: var(--ink);
+        color: rgba(250,162,202,0.7);
         text-decoration: underline;
         text-decoration-style: dotted;
+        transition: color 0.15s;
       }
 
-      /* Responsive */
+      footer a:hover { color: var(--pink); }
+
+      /* ══════════════════════════════════════════
+         RESPONSIVE
+      ══════════════════════════════════════════ */
       @media (max-width: 600px) {
-        .container {
-          padding: 24px 16px 48px;
-        }
-
-        header {
-          margin-bottom: 32px;
-        }
-
-        .primary-download {
-          padding: 18px 26px;
-          font-size: 17px;
-          width: 100%;
-          justify-content: center;
-        }
-
-        .all-platforms {
-          padding: 24px 16px;
-        }
+        .nav { padding: 16px 20px; }
+        .hero { padding: 32px 20px 72px; }
+        .float-ring { width: 160px; height: 160px; }
+        .smiley-main { width: 130px; height: 130px; }
+        .chip { display: none; }
+        .hero-sub { margin-bottom: 36px; }
+        .btn-download { width: 100%; justify-content: center; font-size: 18px; }
+        .section { padding: 0 16px; }
       }
     </style>
   </head>
-  <body>
-    <div class="container">
-      <header>
-        <span class="header-badge">
-          <img
-            src="praat-smiley.png"
-            alt=""
-            width="20"
-            height="20"
-            style="border-radius: 50%; border: 2px solid var(--ink)"
-          />
-          Free &amp; open source
-        </span>
-        <a
-          class="github-link"
-          href="https://github.com/pottie2288/Praat"
-          target="_blank"
-          rel="noopener"
-          >GitHub →</a
-        >
-      </header>
 
-      <section class="hero">
-        <img
-          class="smiley-hero"
-          src="praat-smiley.png"
-          alt="Praat mascot"
-          width="160"
-          height="160"
-        />
-        <div class="logo-wrap">
-          <svg
-            class="logo-svg"
-            viewBox="0 0 930 328"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-label="praat"
-          >
-            <style>
-              .praat-text {
-                font-family:
-                  ui-rounded, "SF Pro Rounded", "Nunito", "Baloo 2",
-                  system-ui, sans-serif;
-                font-weight: 900;
-                font-size: 260px;
-                dominant-baseline: central;
-                text-anchor: middle;
-              }
-            </style>
-            <text
-              x="465"
-              y="164"
-              class="praat-text"
-              stroke="var(--ink)"
-              stroke-width="40"
-              stroke-linejoin="round"
-              fill="none"
-            >
-              praat
-            </text>
-            <text
-              x="465"
-              y="164"
-              class="praat-text"
-              fill="var(--pink)"
-              stroke="var(--ink)"
-              stroke-width="12"
-              stroke-linejoin="round"
-            >
-              praat
-            </text>
-          </svg>
+  <body>
+
+    <!-- ══ HERO ══ -->
+    <section class="hero">
+      <div class="hero-grid"></div>
+
+      <nav class="nav">
+        <a class="nav-logo" href="#">
+          <img src="praat-smiley.png" alt="Praat" />
+          praat
+        </a>
+        <div class="nav-right">
+          <a class="btn-ghost" href="https://github.com/pottie2288/Praat" target="_blank" rel="noopener">⭐ Star on GitHub</a>
+        </div>
+      </nav>
+
+      <div class="hero-inner">
+        <!-- Smiley with floating chips -->
+        <div class="float-ring">
+          <span class="chip chip-1">🔒 100% private</span>
+          <img class="smiley-main" src="praat-smiley.png" alt="Praat mascot" />
+          <span class="chip chip-2">⚡ GPU-powered</span>
+          <span class="chip chip-3">🆓 Free forever</span>
         </div>
 
-        <h1 class="tagline">
-          Speech to text that stays on&nbsp;your&nbsp;device.
-        </h1>
-        <p class="sub-tagline">
-          Press a shortcut, talk, and the transcription lands wherever your
-          cursor is. Runs 100% locally — your voice never leaves your
-          computer.
+        <span class="hero-wordmark">praat</span>
+
+        <h1 class="hero-tagline">Speech to text that stays<br>on your device.</h1>
+        <p class="hero-sub">
+          Press a shortcut, talk — transcription lands right where your cursor is.
+          Runs 100% locally. Your voice never touches a server.
         </p>
 
-        <div class="primary-download-wrap">
-          <a
-            id="primary-download"
-            class="primary-download"
-            href="https://github.com/pottie2288/Praat/releases/latest"
-            target="_blank"
-            rel="noopener"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
+        <div class="cta-group">
+          <a id="primary-download" class="btn-download"
+             href="https://github.com/pottie2288/Praat/releases/latest"
+             target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
             </svg>
             <span id="primary-download-label">Download Praat</span>
           </a>
-          <p class="primary-download-note" id="primary-download-note">
-            Detecting your platform…
-          </p>
+          <p class="cta-meta" id="primary-download-note">detecting your platform…</p>
         </div>
+      </div>
 
-        <div class="all-platforms">
-          <img
-            class="smiley-peek top-right"
-            src="praat-smiley.png"
-            alt=""
-            aria-hidden="true"
-          />
-          <h3>Or pick your platform</h3>
-          <div class="platforms-grid">
-            <a
-              class="platform-card"
-              data-os="macos"
-              href="https://github.com/pottie2288/Praat/releases/latest"
-              target="_blank"
-              rel="noopener"
-            >
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-              </svg>
-              <span class="name">macOS</span>
-              <span class="formats">Apple Silicon · Intel</span>
-            </a>
-            <a
-              class="platform-card"
-              data-os="windows"
-              href="https://github.com/pottie2288/Praat/releases/latest"
-              target="_blank"
-              rel="noopener"
-            >
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/>
-              </svg>
-              <span class="name">Windows</span>
-              <span class="formats">x64 · ARM64 · .msi / .exe</span>
-            </a>
-            <a
-              class="platform-card"
-              data-os="linux"
-              href="https://github.com/pottie2288/Praat/releases/latest"
-              target="_blank"
-              rel="noopener"
-            >
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 00-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.106 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.132 1.884 1.071.771-.06 1.592-.536 2.257-1.306.631-.765 1.683-1.084 2.378-1.503.348-.199.629-.469.649-.853.023-.4-.2-.811-.714-1.376v-.097l-.003-.003c-.17-.2-.25-.535-.338-.926-.085-.401-.182-.786-.492-1.046h-.003c-.059-.054-.123-.067-.188-.135a.357.357 0 00-.19-.064c.431-1.278.264-2.55-.173-3.694-.533-1.41-1.465-2.638-2.175-3.483-.796-1.005-1.576-1.957-1.56-3.368.026-2.152.236-6.133-3.544-6.139zm.529 3.405h.013c.213 0 .396.062.584.198.19.135.33.332.438.533.105.259.158.459.166.724 0-.02.006-.04.006-.06v.105a.086.086 0 01-.004-.021l-.004-.024a1.807 1.807 0 01-.15.706.953.953 0 01-.213.335.71.71 0 00-.088-.042c-.104-.045-.198-.064-.284-.133a1.312 1.312 0 00-.22-.066c.05-.06.146-.133.183-.198.053-.128.082-.264.088-.402v-.02a1.21 1.21 0 00-.061-.4c-.045-.134-.101-.2-.183-.333a.574.574 0 00-.403-.267h-.016c-.15 0-.282.058-.402.199a.971.971 0 00-.228.268 1.316 1.316 0 00-.084.402v.027c.006.133.04.264.092.386.027.133.08.2.13.268-.037.021-.096.065-.152.088a1.54 1.54 0 01-.223.133 1.166 1.166 0 01-.21-.267 1.132 1.132 0 01-.155-.399 1.686 1.686 0 01-.054-.469c.012-.176.05-.347.114-.512.065-.19.11-.337.218-.469.126-.146.232-.277.424-.399 0 0 .04-.026.066-.026zm2.567.613c.172-.016.357.023.568.156.263.155.419.418.55.742 0-.022.014-.042.014-.064v.128a.091.091 0 01-.004-.022v-.024a2.055 2.055 0 01-.102.795 1.04 1.04 0 01-.307.454 2.18 2.18 0 01-.13-.065l-.105-.077c.031-.022.08-.055.098-.09.042-.062.088-.164.117-.266l.036-.156-.006-.106a1.3 1.3 0 00-.072-.4c-.055-.139-.105-.204-.18-.337-.088-.126-.202-.2-.326-.267-.005 0-.011-.002-.016-.002-.075.002-.148.037-.222.108a1.035 1.035 0 00-.18.335.818.818 0 00-.06.35v.027c-.003.124-.02.252.028.374.038.134.083.2.145.267.063.065.145.14.228.17a.56.56 0 01-.144.11 1.01 1.01 0 01-.265.102 1.154 1.154 0 01-.29-.264 1.284 1.284 0 01-.194-.398 1.88 1.88 0 01-.083-.469 1.35 1.35 0 01.062-.511c.052-.197.105-.341.214-.473.144-.17.302-.32.552-.336z"/>
-              </svg>
-              <span class="name">Linux</span>
-              <span class="formats">AppImage · .deb · .rpm</span>
-            </a>
-          </div>
-        </div>
-      </section>
+      <div class="scroll-hint" aria-hidden="true">
+        <span>scroll</span>
+        <svg class="scroll-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </div>
+    </section>
 
-      <section class="features">
-        <div class="feature">
-          <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          </div>
-          <h3>100% private</h3>
-          <p>
-            Transcription runs entirely on your device. No cloud, no account,
-            no telemetry. Your voice never leaves your machine.
-          </p>
-        </div>
-        <div class="feature">
-          <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          </div>
-          <h3>Press, talk, paste</h3>
-          <p>
-            A global shortcut turns your voice into text right where your
-            cursor is. Works in any app — email, docs, chat, code.
-          </p>
-        </div>
-        <div class="feature">
-          <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          </div>
-          <h3>Fast on real hardware</h3>
-          <p>
-            GPU-accelerated with Metal on Mac, Vulkan on Windows/Linux. Pick
-            Small, Medium, Turbo, or Large models based on your machine.
-          </p>
-        </div>
-      </section>
-
-      <section class="faq">
-        <img
-          class="smiley-peek bottom-left"
-          src="praat-smiley.png"
-          alt=""
-          aria-hidden="true"
-        />
-        <h2>Questions</h2>
-
-        <details>
-          <summary>Is it really free?</summary>
-          <p>
-            Yes. Praat is MIT-licensed open source. Download it, use it, share
-            it with anyone. No subscription, no account, no paywall.
-          </p>
-        </details>
-
-        <details>
-          <summary>Does my voice get sent to a server?</summary>
-          <p>
-            No. Transcription happens locally on your device using Whisper
-            models. Praat makes exactly one network call — to download the
-            model file once on first launch. After that, it can run fully
-            offline.
-          </p>
-        </details>
-
-        <details>
-          <summary>What do I do if macOS says the app is damaged?</summary>
-          <p>
-            macOS Gatekeeper blocks apps that aren't code-signed by a paid
-            Apple Developer account. Right-click the Praat app → Open → Open
-            Anyway. You only need to do this once. Or, from Terminal:
-            <code>xattr -cr /Applications/Praat.app</code>
-          </p>
-        </details>
-
-        <details>
-          <summary>What about Windows SmartScreen?</summary>
-          <p>
-            When you run the installer, Windows may show "Microsoft Defender
-            SmartScreen prevented an unrecognized app." Click "More info" →
-            "Run anyway." Same reason — no paid code-signing cert attached.
-          </p>
-        </details>
-
-        <details>
-          <summary>What permissions does Praat need?</summary>
-          <p>
-            Microphone access (to hear you) and, on macOS, Accessibility (to
-            paste transcribed text into other apps). Nothing else.
-          </p>
-        </details>
-
-        <details>
-          <summary>Which model should I pick?</summary>
-          <p>
-            <strong>Turbo</strong> is the best default for most machines —
-            fast and accurate. Pick <strong>Small</strong> on older hardware
-            and <strong>Large</strong> if you want the highest quality and
-            have the GPU to spare.
-          </p>
-        </details>
-      </section>
-
-      <footer>
-        <p>
-          Made with care · Based on the open-source
-          <a
-            href="https://github.com/cjpais/Handy"
-            target="_blank"
-            rel="noopener"
-            >Handy</a
-          >
-          project by CJ Pais · MIT licensed
-        </p>
-      </footer>
+    <!-- ══ PROOF STRIP ══ -->
+    <div class="proof-strip" aria-hidden="true">
+      <div class="proof-track">
+        <span class="proof-item"><span class="proof-dot"></span>No account needed</span>
+        <span class="proof-item"><span class="proof-dot"></span>Works offline</span>
+        <span class="proof-item"><span class="proof-dot"></span>MIT open source</span>
+        <span class="proof-item"><span class="proof-dot"></span>macOS &amp; Windows</span>
+        <span class="proof-item"><span class="proof-dot"></span>GPU-accelerated</span>
+        <span class="proof-item"><span class="proof-dot"></span>Any app, any cursor</span>
+        <span class="proof-item"><span class="proof-dot"></span>Whisper-powered</span>
+        <span class="proof-item"><span class="proof-dot"></span>No account needed</span>
+        <span class="proof-item"><span class="proof-dot"></span>Works offline</span>
+        <span class="proof-item"><span class="proof-dot"></span>MIT open source</span>
+        <span class="proof-item"><span class="proof-dot"></span>macOS &amp; Windows</span>
+        <span class="proof-item"><span class="proof-dot"></span>GPU-accelerated</span>
+        <span class="proof-item"><span class="proof-dot"></span>Any app, any cursor</span>
+        <span class="proof-item"><span class="proof-dot"></span>Whisper-powered</span>
+      </div>
     </div>
 
+    <!-- ══ HOW IT WORKS ══ -->
+    <section class="how">
+      <div class="section">
+        <h2 class="section-title">How it works</h2>
+        <p class="section-sub">Three steps, zero friction.</p>
+
+        <div class="steps">
+          <div class="step" data-n="1">
+            <div class="step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="4"/>
+                <path d="M8 12h8M12 8v8"/>
+              </svg>
+            </div>
+            <h3>Pick your model</h3>
+            <p>Choose Small for speed or Large for maximum accuracy. Praat downloads Whisper once and runs it entirely on your hardware — Metal on Mac, Vulkan on Windows.</p>
+          </div>
+
+          <div class="step" data-n="2">
+            <div class="step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="23"/>
+                <line x1="8" y1="23" x2="16" y2="23"/>
+              </svg>
+            </div>
+            <h3>Press &amp; talk</h3>
+            <p>Hold your global shortcut and speak naturally. Praat listens with Voice Activity Detection — it only captures when you're actually talking, not silences.</p>
+          </div>
+
+          <div class="step" data-n="3">
+            <div class="step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+            <h3>Text appears instantly</h3>
+            <p>Release the shortcut and your transcription is pasted exactly where your cursor sits — in any app, any text field, any editor. Zero copy-paste needed.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ FEATURES BENTO ══ -->
+    <section class="features">
+      <div class="section">
+        <h2 class="section-title">Built different</h2>
+        <p class="section-sub">Everything you'd want from a transcription tool — and nothing you wouldn't.</p>
+
+        <div class="bento">
+
+          <div class="bento-card accent">
+            <div class="bento-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </div>
+            <h3>Private by design</h3>
+            <p>Transcription runs inside your machine. No API calls, no cloud processing, no usage logs. Not even the model creators can hear you — because it never connects.</p>
+          </div>
+
+          <div class="bento-card">
+            <div class="bento-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+              </svg>
+            </div>
+            <h3>GPU-accelerated</h3>
+            <p>Metal on Apple Silicon. Vulkan on Windows. Your GPU does the heavy lifting so transcription lands in seconds, not minutes.</p>
+          </div>
+
+          <div class="bento-card">
+            <div class="bento-mascot">
+              <img src="praat-smiley.png" alt="Praat mascot" />
+              <div>
+                <h3>Open source</h3>
+                <p>MIT licensed. Read the code, fork it, improve it. No black boxes, no hidden behavior.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bento-card">
+            <div class="bento-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+            </div>
+            <h3>Works in any app</h3>
+            <p>Email, Slack, Notion, VS Code, Terminal, browser — if it has a text cursor, Praat can type into it. No integrations required.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ DOWNLOADS ══ -->
+    <section class="downloads">
+      <div class="section">
+        <div class="smiley-peek-wrap">
+          <img src="praat-smiley.png" alt="" aria-hidden="true" />
+        </div>
+        <h2 class="section-title">Download Praat</h2>
+        <p class="section-sub">Free forever. No account. No catch.</p>
+
+        <div class="platform-grid">
+
+          <!-- macOS Apple Silicon -->
+          <a class="platform-card featured" id="card-macos-arm"
+             href="https://github.com/pottie2288/Praat/releases/latest"
+             target="_blank" rel="noopener">
+            <div class="platform-os-icon">
+              <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            </div>
+            <div class="platform-name">macOS</div>
+            <div class="platform-arch">Apple Silicon — M1, M2, M3, M4</div>
+            <div class="platform-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download .dmg
+            </div>
+            <div class="platform-corner"></div>
+          </a>
+
+          <!-- macOS Intel -->
+          <a class="platform-card" id="card-macos-intel"
+             href="https://github.com/pottie2288/Praat/releases/latest"
+             target="_blank" rel="noopener">
+            <div class="platform-os-icon">
+              <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            </div>
+            <div class="platform-name">macOS</div>
+            <div class="platform-arch">Intel — x86_64</div>
+            <div class="platform-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download .dmg
+            </div>
+            <div class="platform-corner"></div>
+          </a>
+
+          <!-- Windows -->
+          <a class="platform-card" id="card-windows"
+             href="https://github.com/pottie2288/Praat/releases/latest"
+             target="_blank" rel="noopener">
+            <div class="platform-os-icon">
+              <svg viewBox="0 0 24 24"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
+            </div>
+            <div class="platform-name">Windows</div>
+            <div class="platform-arch">x64 — Windows 10 &amp; 11</div>
+            <div class="platform-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download .msi
+            </div>
+            <div class="platform-corner"></div>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ FAQ ══ -->
+    <section class="faq">
+      <div class="section">
+        <h2 class="section-title">Questions</h2>
+        <p class="section-sub">Everything you might wonder about.</p>
+
+        <div class="faq-list">
+
+          <details>
+            <summary>Is it really free? <span class="summary-icon">+</span></summary>
+            <p>Yes. Praat is MIT-licensed open source. Download it, use it, share it with anyone. No subscription, no account, no paywall — ever.</p>
+          </details>
+
+          <details>
+            <summary>Does my voice get sent anywhere? <span class="summary-icon">+</span></summary>
+            <p>No. Transcription happens locally on your device using Whisper models. Praat makes exactly one network call — to download the model file once on first launch. After that, it works completely offline.</p>
+          </details>
+
+          <details>
+            <summary>macOS says the app is damaged — what do I do? <span class="summary-icon">+</span></summary>
+            <p>macOS Gatekeeper blocks apps that aren't code-signed with a paid Apple Developer certificate. Right-click the app → Open → Open Anyway. You only need to do this once. Or run <code>xattr -cr /Applications/Praat.app</code> in Terminal.</p>
+          </details>
+
+          <details>
+            <summary>Windows SmartScreen is blocking the installer. <span class="summary-icon">+</span></summary>
+            <p>Click "More info" → "Run anyway." This happens because Praat doesn't have a paid code-signing certificate. The app is open source — you can review every line at the GitHub link above.</p>
+          </details>
+
+          <details>
+            <summary>Which model should I pick? <span class="summary-icon">+</span></summary>
+            <p><strong>Turbo</strong> is the best default for most people — fast and highly accurate. Use <strong>Small</strong> on older machines. Use <strong>Large</strong> if you want the absolute best quality and have a capable GPU.</p>
+          </details>
+
+          <details>
+            <summary>What permissions does Praat need? <span class="summary-icon">+</span></summary>
+            <p>Microphone access (to hear you) and, on macOS, Accessibility permission (to paste text into other apps). That's it — nothing else is requested.</p>
+          </details>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ FOOTER ══ -->
+    <footer>
+      <a class="footer-logo" href="#">
+        <img src="praat-smiley.png" alt="Praat" />
+        <span>praat</span>
+      </a>
+      <p>
+        Free &amp; open source · MIT licensed<br>
+        Built on the shoulders of <a href="https://github.com/cjpais/Handy" target="_blank" rel="noopener">Handy</a> by CJ Pais ·
+        <a href="https://github.com/pottie2288/Praat" target="_blank" rel="noopener">GitHub</a>
+      </p>
+    </footer>
+
     <script>
-      // Replace this with your actual GitHub repo once you push it.
       const REPO = "pottie2288/Praat";
       const RELEASES_API = `https://api.github.com/repos/${REPO}/releases/latest`;
       const RELEASES_PAGE = `https://github.com/${REPO}/releases/latest`;
 
-      // Detect OS for primary button + highlight
       function detectOS() {
         const ua = navigator.userAgent;
-        const platform =
-          navigator.userAgentData?.platform || navigator.platform || "";
+        const platform = navigator.userAgentData?.platform || navigator.platform || "";
         const p = (platform + " " + ua).toLowerCase();
-
         if (p.includes("mac") || p.includes("darwin")) return "macos";
         if (p.includes("win")) return "windows";
-        if (p.includes("linux") || p.includes("x11")) return "linux";
         return "unknown";
       }
 
-      // Match an asset filename to its platform + arch.
-      function pickAssetFor(os, assets) {
-        const isArm =
-          navigator.userAgentData?.architecture === "arm" ||
-          /arm|aarch64/i.test(navigator.userAgent);
+      function isAppleSilicon() {
+        if (navigator.userAgentData?.architecture === "arm") return true;
+        if (/arm|aarch64/i.test(navigator.userAgent)) return true;
+        // Canvas trick for M1 detection fallback
+        return false;
+      }
 
-        const match = (patterns) =>
-          assets.find((a) =>
-            patterns.some((re) => re.test(a.name.toLowerCase()))
-          );
+      function pickAsset(os, arch, assets) {
+        const find = (patterns) =>
+          assets.find((a) => patterns.some((re) => re.test(a.name.toLowerCase())));
 
         if (os === "macos") {
-          return (
-            match(
-              isArm
-                ? [/aarch64.*\.dmg$/, /arm64.*\.dmg$/]
-                : [/x64.*\.dmg$/, /x86_64.*\.dmg$/]
-            ) || match([/\.dmg$/])
-          );
+          if (arch === "arm")
+            return find([/aarch64.*\.dmg$/, /arm64.*\.dmg$/]) || find([/\.dmg$/]);
+          return find([/x86_64.*\.dmg$/, /x64.*\.dmg$/]) || find([/\.dmg$/]);
         }
-        if (os === "windows") {
-          return (
-            match(
-              isArm
-                ? [/arm64.*\.msi$/, /aarch64.*\.msi$/]
-                : [/x64.*\.msi$/, /_x64.*setup.*\.exe$/]
-            ) || match([/\.msi$/, /setup\.exe$/])
-          );
-        }
-        if (os === "linux") {
-          return match([/\.appimage$/, /\.deb$/, /\.rpm$/]);
-        }
+        if (os === "windows")
+          return find([/x64.*\.msi$/, /_x64.*\.exe$/]) || find([/\.msi$/, /\.exe$/]);
         return null;
       }
 
-      // Populate download URLs from the latest release.
-      async function loadLatest() {
+      async function init() {
         const os = detectOS();
-        const primaryBtn = document.getElementById("primary-download");
+        const arch = isAppleSilicon() ? "arm" : "x64";
+
+        const primaryBtn   = document.getElementById("primary-download");
         const primaryLabel = document.getElementById("primary-download-label");
-        const primaryNote = document.getElementById("primary-download-note");
-        const osName = {
-          macos: "macOS",
-          windows: "Windows",
-          linux: "Linux",
-          unknown: "your platform",
-        }[os];
+        const primaryNote  = document.getElementById("primary-download-note");
 
-        primaryLabel.textContent = `Download for ${osName}`;
+        // Set primary button label
+        const labels = { macos: `Download for macOS`, windows: "Download for Windows", unknown: "Download Praat" };
+        primaryLabel.textContent = labels[os] || labels.unknown;
 
-        // Highlight matching card
-        document.querySelectorAll(".platform-card").forEach((card) => {
-          if (card.dataset.os === os) {
-            card.style.background = "var(--pink-soft)";
-            card.style.borderWidth = "4px";
+        // Highlight the matching platform card
+        if (os === "macos") {
+          const cardId = arch === "arm" ? "card-macos-arm" : "card-macos-intel";
+          const card = document.getElementById(cardId);
+          if (card) {
+            card.classList.add("featured");
+            // un-feature the other mac card
+            const other = document.getElementById(arch === "arm" ? "card-macos-intel" : "card-macos-arm");
+            if (other) other.classList.remove("featured");
           }
-        });
+        } else if (os === "windows") {
+          const card = document.getElementById("card-windows");
+          if (card) card.classList.add("featured");
+        }
 
         try {
-          const res = await fetch(RELEASES_API, {
-            headers: { Accept: "application/vnd.github+json" },
-          });
-          if (!res.ok) throw new Error(`API ${res.status}`);
+          const res = await fetch(RELEASES_API, { headers: { Accept: "application/vnd.github+json" } });
+          if (!res.ok) throw new Error(res.status);
           const data = await res.json();
           const assets = data.assets || [];
           const tag = data.tag_name || "";
 
-          // Primary button → best-match asset for detected OS
-          const primary = pickAssetFor(os, assets);
+          // Wire primary button
+          const primary = pickAsset(os, arch, assets);
           if (primary) {
             primaryBtn.href = primary.browser_download_url;
-            primaryBtn.setAttribute("download", "");
           }
-          primaryNote.textContent = tag
-            ? `${tag} · free forever`
-            : "free forever";
+          primaryNote.textContent = tag ? `${tag} · free forever` : "free forever";
 
-          // Each platform card → first matching asset
-          ["macos", "windows", "linux"].forEach((osKey) => {
-            const card = document.querySelector(
-              `.platform-card[data-os="${osKey}"]`
-            );
-            if (!card) return;
-            const asset = pickAssetFor(osKey, assets);
-            if (asset) {
-              card.href = asset.browser_download_url;
-              card.setAttribute("download", "");
-            }
+          // Wire platform cards
+          const cardMap = [
+            { id: "card-macos-arm",   os: "macos",   arch: "arm" },
+            { id: "card-macos-intel", os: "macos",   arch: "x64" },
+            { id: "card-windows",     os: "windows", arch: "x64" },
+          ];
+          cardMap.forEach(({ id, os: cardOs, arch: cardArch }) => {
+            const card = document.getElementById(id);
+            const asset = pickAsset(cardOs, cardArch, assets);
+            if (card && asset) card.href = asset.browser_download_url;
           });
-        } catch (err) {
-          // Fallback: link to releases page if API fails
+
+        } catch (_) {
           primaryNote.textContent = "free forever";
         }
       }
 
-      loadLatest();
+      init();
     </script>
   </body>
 </html>
