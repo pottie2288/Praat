@@ -101,6 +101,7 @@ jobs:
         uses: swatinem/rust-cache@v2
         with:
           workspaces: "./src-tauri -> target"
+          prefix-key: v2
           key: ${{ inputs.platform }}-${{ inputs.target }}
 
       - name: install dependencies (ubuntu 24.04 x64)

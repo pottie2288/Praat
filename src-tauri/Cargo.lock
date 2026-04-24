@@ -1394,7 +1394,7 @@ dependencies = [
 
 [[package]]
 name = "dlopen2"
-version = "0.9.3"
+version = "0.9.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5e2c5bd4158e66d1e215c49b837e11d62f3267b30c92f1d171c4d3105e3dc4d4"
 dependencies = [
@@ -2304,7 +2304,7 @@ dependencies = [
 
 [[package]]
 name = "gtk-layer-shell"
-version = "0.9.3"
+version = "0.9.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bc759b3184830a547b31549ab40c4b54450ab702bba79ba23f049bc1d1e3ca98"
 dependencies = [
@@ -4348,7 +4348,7 @@ dependencies = [
 
 [[package]]
 name = "praat"
-version = "0.9.3"
+version = "0.9.4"
 dependencies = [
  "anyhow",
  "chrono",
@@ -6605,7 +6605,7 @@ dependencies = [
 
 [[package]]
 name = "tinystr"
-version = "0.9.3"
+version = "0.9.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "42d3e9c45c09de15d06dd8acf5f4e0e399e85927b7f00711024eb7ae10fa4869"
 dependencies = [
@@ -6689,7 +6689,7 @@ dependencies = [
 
 [[package]]
 name = "toml"
-version = "0.9.3"
+version = "0.9.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "185d8ab0dfbb35cf1399a6344d8484209c088f75f8f68230da55d48d95d43e3d"
 dependencies = [
@@ -8305,7 +8305,7 @@ dependencies = [
 
 [[package]]
 name = "wl-clipboard-rs"
-version = "0.9.3"
+version = "0.9.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e9651471a32e87d96ef3a127715382b2d11cc7c8bb9822ded8a7cc94072eb0a3"
 dependencies = [

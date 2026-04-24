@@ -841,6 +841,9 @@ Section Install
     !insertmacro NSIS_HOOK_POSTINSTALL
   !endif
 
+  ; Force Windows to flush icon cache so shortcuts show the new icon immediately
+  System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0x00001000, 0, 0)'
+
   ; Auto close this page for passive mode
   ${If} $PassiveMode = 1
     SetAutoClose true
