@@ -1147,8 +1147,10 @@
       function isAppleSilicon() {
         if (navigator.userAgentData?.architecture === "arm") return true;
         if (/arm|aarch64/i.test(navigator.userAgent)) return true;
-        // Canvas trick for M1 detection fallback
-        return false;
+        // Browsers on Apple Silicon report "Intel" in the user agent for compatibility.
+        // Default to ARM — all Macs sold since late 2020 are Apple Silicon.
+        // Intel Mac users can use the Intel card in the downloads section below.
+        return true;
       }
 
       function pickAsset(os, arch, assets) {
