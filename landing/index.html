@@ -983,6 +983,49 @@
         .btn-download { width: 100%; justify-content: center; font-size: 18px; }
         .section { padding: 0 16px; }
       }
+
+      /* ─── RIPPLE GRID ─── */
+      #hero-ripple-grid {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        z-index: 1;
+        -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+        mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+      }
+
+      .ripple-grid {
+        display: grid;
+        margin-inline: auto;
+      }
+
+      .ripple-cell {
+        border: 0.5px solid rgba(250, 162, 202, 0.14);
+        background-color: rgba(250, 162, 202, 0.04);
+        opacity: 0.45;
+        transition: opacity 0.15s, background-color 0.15s;
+        cursor: pointer;
+        will-change: transform;
+      }
+
+      .ripple-cell:hover {
+        opacity: 0.85;
+        background-color: rgba(250, 162, 202, 0.16);
+      }
+
+      .ripple-cell.rippling {
+        animation: cell-ripple var(--ripple-dur, 300ms) ease-out;
+      }
+
+      @keyframes cell-ripple {
+        0%   { opacity: 0.45; transform: scale(1);    background-color: rgba(250, 162, 202, 0.04); border-color: rgba(250, 162, 202, 0.14); }
+        25%  { opacity: 1;    transform: scale(0.88); background-color: rgba(250, 162, 202, 0.55); border-color: rgba(250, 162, 202, 0.75); }
+        100% { opacity: 0.45; transform: scale(1);    background-color: rgba(250, 162, 202, 0.04); border-color: rgba(250, 162, 202, 0.14); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .ripple-cell, .ripple-cell.rippling { animation: none !important; transition: none !important; }
+      }
     </style>
   </head>
 
@@ -991,6 +1034,7 @@
     <!-- ══ HERO ══ -->
     <section class="hero">
       <div class="hero-grid"></div>
+      <div id="hero-ripple-grid" aria-hidden="true"></div>
 
       <nav class="nav">
         <a class="nav-logo" href="#">
@@ -1597,6 +1641,83 @@
       })();
 
       init();
+    </script>
+
+    <script>
+      /* ─── Hero Ripple Grid ─── */
+      (function () {
+        var CELL_SIZE = 56;
+        var container = document.getElementById('hero-ripple-grid');
+        if (!container) return;
+
+        function buildGrid() {
+          container.innerHTML = '';
+          var hero = container.parentElement;
+          var cols = Math.ceil(hero.offsetWidth / CELL_SIZE) + 1;
+          var rows = Math.ceil(hero.offsetHeight / CELL_SIZE) + 1;
+
+          var grid = document.createElement('div');
+          grid.className = 'ripple-grid';
+          grid.style.gridTemplateColumns = 'repeat(' + cols + ', ' + CELL_SIZE + 'px)';
+          grid.style.gridTemplateRows = 'repeat(' + rows + ', ' + CELL_SIZE + 'px)';
+          grid.style.width = (cols * CELL_SIZE) + 'px';
+          grid.style.height = (rows * CELL_SIZE) + 'px';
+
+          var cells = [];
+          for (var r = 0; r < rows; r++) {
+            for (var c = 0; c < cols; c++) {
+              var cell = document.createElement('div');
+              cell.className = 'ripple-cell';
+              cell._row = r;
+              cell._col = c;
+              cells.push(cell);
+              grid.appendChild(cell);
+            }
+          }
+
+          container.appendChild(grid);
+
+          container.addEventListener('click', function (e) {
+            var target = e.target;
+            if (!target.classList || !target.classList.contains('ripple-cell')) return;
+
+            var clickRow = target._row;
+            var clickCol = target._col;
+
+            /* Cancel any in-flight ripples so we can restart cleanly */
+            cells.forEach(function (c) {
+              clearTimeout(c._rippleTimer);
+              clearTimeout(c._endTimer);
+              c.classList.remove('rippling');
+            });
+
+            requestAnimationFrame(function () {
+              cells.forEach(function (c) {
+                var dist = Math.hypot(clickRow - c._row, clickCol - c._col);
+                var delay = Math.max(0, dist * 55);
+                var duration = 200 + dist * 80;
+
+                c.style.setProperty('--ripple-dur', duration + 'ms');
+
+                c._rippleTimer = setTimeout(function () {
+                  c.classList.add('rippling');
+                  c._endTimer = setTimeout(function () {
+                    c.classList.remove('rippling');
+                  }, duration + 50);
+                }, delay);
+              });
+            });
+          });
+        }
+
+        buildGrid();
+
+        var resizeTimer;
+        window.addEventListener('resize', function () {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(buildGrid, 200);
+        }, { passive: true });
+      })();
     </script>
   </body>
 </html>
