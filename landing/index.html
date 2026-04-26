@@ -1626,7 +1626,7 @@
         }
 
         // Physical keyboard
-        document.addEventListener("keydown", (e) => { if (!e.repeat) press(e.code); });
+        document.addEventListener("keydown", (e) => { e.preventDefault(); if (!e.repeat) press(e.code); });
         document.addEventListener("keyup",   (e) => release(e.code));
 
         // Mouse + touch on individual keys
